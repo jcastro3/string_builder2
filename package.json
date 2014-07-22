@@ -1,0 +1,28 @@
+{
+  "name": "String_Builder",
+  "version": "0.0.0",
+  "description": "",
+  "main": "stringBuilder.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jcastro3/string_builder2.git"
+  },
+  "keywords": [
+    "stringbuilder"
+  ],
+  "author": "Jesus Castro",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jcastro3/string_builder2/issues"
+  },
+  "homepage": "https://github.com/jcastro3/string_builder2",
+  "devDependencies": {
+    "karma": "^0.12.17",
+    "karma-jasmine": "^0.1.5",
+    "grunt": "^0.4.5",
+    "grunt-karma": "^0.8.3"
+  }
+}
