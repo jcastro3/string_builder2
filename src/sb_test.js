@@ -2,24 +2,31 @@
  * Created by jcastro on 7/21/2014.
  */
 
+
 describe('___String Builder___', function () {
     'use strict';
-        var _sb,
+        var sb,
             array;
     beforeEach(function () {
          array = [];
-         _sb = new SB();
+         sb = new StringBuilder();
     });
 
     describe('Cat Method', function(){
-        it('simple cat', function(){
-            var string = sb.cat('hello');
-            expect(string).toBe('hello');
+        it('should store one value in buffer', function(){
+            var storage = sb.cat('hello');
+            expect(storage.buffer).toMatch(['hello']);
         });
-        it('multiple cat', function() {
-            var string = sb.cat('Javascript', 'is', 'sexy').cat('!');
-            expect(string).toBe('Javascript is sexy!');
-        })
+        it('should store multiple cat values in buffer', function() {
+            var storage = sb.cat('Javascript', 'is', 'sexy').cat('!');
+            expect(storage.buffer).toMatch(['Javascript','is','sexy','!']);
+        });
+
+        it('should be empty', function() {
+           var storage = sb.cat(),
+               empty = [];
+            expect(storage.buffer).toMatch(empty);
+        });
 
     });
 });
