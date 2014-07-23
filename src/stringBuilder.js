@@ -70,7 +70,12 @@
                 }
             }
             return this;
-        }
+        },
+
+       string: function() {
+           var result = this.buffer.join(' ');
+           return result;
+       }
 
 
 

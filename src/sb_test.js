@@ -153,7 +153,7 @@ describe('___String Builder___', function () {
             it('should return string, using cat()', function() {
                 storage = sb.cat('Hello').cat(function(){ return 'World'}).cat(['!']).string();
                 expect(typeof storage).toBe('string');
-                expect(storage).toBe('Hello World!');
+                expect(storage).toBe('Hello World !');
             })
 
             it('should return string, using rep()', function() {
@@ -166,7 +166,7 @@ describe('___String Builder___', function () {
                 var print = true;
                 storage = sb.catIf('Print this because its true', print).string();
                 expect(typeof storage).toBe('string');
-                expect(storage).toBe('Hello World!');
+                expect(storage).toBe('Print this because its true');
             })
         })
     });
