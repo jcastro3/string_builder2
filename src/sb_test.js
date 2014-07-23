@@ -108,7 +108,7 @@ describe('___String Builder___', function () {
         });
 
         describe('array and function as parameters', function() {
-            it('should ', function() {
+            it('should pass ', function() {
                 storage = sb.cat('The surface of the sun is')
                             .cat(function() { return 15;})
                             .rep(function() {return 0;},3)
@@ -118,4 +118,23 @@ describe('___String Builder___', function () {
             })
         })
     });
+
+    describe('catIF method', function() {
+
+        describe('booleans', function() {
+            it('should pass given truth boolean ', function() {
+                var dude = 'm', lady = 'f';
+                storage = sb.cat('Hi my name is').catIf('Tony', dude === 'm').cat(', and her name is').catIf('July', lady ==='f');
+                expect(storage.buffer).toMatch(['Hi my name is', 'Tony', ', and here name is', 'July']);
+            })
+
+            it('should fail given false boolean', function() {
+                var dude = 'm'
+                storage = sb.catIf('Im an alien', !dude);
+                expect(storage.buffer).toMatch([]);
+            })
+        })
+    })
+
+
 });

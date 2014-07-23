@@ -27,7 +27,7 @@
 
         cat: function (){
 
-            var args = Array.prototype.slice.apply(arguments),
+            var args = [].slice.apply(arguments),
                 length = args.length,
                 i,
                 val;
@@ -47,7 +47,8 @@
 
         rep: function() {
             var length = arguments.length,
-                args = Array.prototype.slice.call(arguments, 0, -1),
+            //set the arguments object to the 'this' value of .slice() can be done since arguments has a length property
+                args = [].slice.call(arguments, 0, -1),
                 repeat = arguments[arguments.length -1],
                 i;
             for (i = 0; i < repeat; i += 1) {
@@ -56,6 +57,10 @@
             }
 
             return this;
+        },
+        //argN..., flag
+        catIf: function() {
+
         }
 
 
