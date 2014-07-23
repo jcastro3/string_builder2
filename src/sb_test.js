@@ -147,4 +147,29 @@ describe('___String Builder___', function () {
     })
 
 
+    describe('String method', function() {
+
+        describe('will concatenate buffer into one string', function(){
+            it('should return string, using cat()', function() {
+                storage = sb.cat('Hello').cat(function(){ return 'World'}).cat(['!']).string();
+                expect(typeof storage).toBe('string');
+                expect(storage).toBe('Hello World!');
+            })
+
+            it('should return string, using rep()', function() {
+                storage = sb.rep('hi', 5).string();
+                expect(typeof storage).toBe('string');
+                expect(storage).toBe('hi hi hi hi hi');
+            })
+
+            it('should return string, using catIf()', function() {
+                var print = true;
+                storage = sb.catIf('Print this because its true', print).string();
+                expect(typeof storage).toBe('string');
+                expect(storage).toBe('Hello World!');
+            })
+        })
+    });
+
+
 });
