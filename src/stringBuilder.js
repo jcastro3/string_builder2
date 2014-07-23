@@ -60,7 +60,16 @@
         },
         //argN..., flag
         catIf: function() {
-
+            var last = arguments.length -1,
+                args = [].slice.call(arguments, 0,last),
+                constrain = arguments[last],
+                i;
+            for (i = 0; i < args.length; i += 1) {
+                if(constrain) {
+                    this.cat.apply(this, args);
+                }
+            }
+            return this;
         }
 
 

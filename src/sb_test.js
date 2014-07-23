@@ -120,18 +120,28 @@ describe('___String Builder___', function () {
     });
 
     describe('catIF method', function() {
-
+        var dude = 'm', lady = 'f';
         describe('booleans', function() {
             it('should pass given truth boolean ', function() {
-                var dude = 'm', lady = 'f';
-                storage = sb.cat('Hi my name is').catIf('Tony', dude === 'm').cat(', and her name is').catIf('July', lady ==='f');
-                expect(storage.buffer).toMatch(['Hi my name is', 'Tony', ', and here name is', 'July']);
+                storage = sb.cat('Hi my name is')
+                            .catIf('Tony', dude === 'm')
+                            .cat(', and her name is')
+                            .catIf('July', lady ==='f');
+                expect(storage.buffer).toMatch(['Hi my name is', 'Tony', ', and her name is', 'July']);
             })
 
-            it('should fail given false boolean', function() {
-                var dude = 'm'
+            it('array and functions as parameters', function() {
+                storage = sb.cat('Hi my', ['name'], function(){ return 'is';})
+                            .catIf(function(){ return 'Tony'}, dude === 'm')
+                            .cat('and her name is')
+                            .catIf(['July'], lady === 'f');
+                expect(storage.buffer).toMatch(['Hi my', 'name', 'is', 'Tony','and her name is', 'July'])
+            })
+            it('should be false', function() {
+
                 storage = sb.catIf('Im an alien', !dude);
                 expect(storage.buffer).toMatch([]);
+                expect(storage.buffer).not.toMatch(['Im an alien']);
             })
         })
     })
