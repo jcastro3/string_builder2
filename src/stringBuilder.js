@@ -14,39 +14,48 @@
     };
 
     function isFunction(val) {
-        if(typeof val === 'function') {
-            return true;
-        }
-        return false;
+        return typeof val === 'function';
     }
 
 
     function isArray(val) {
-        if(Object.prototype.toString.call(val) === '[object Array]'){
-            return true;
-        }
-        return false;
+       return Object.prototype.toString.call(val) === '[object Array]'
     }
 
 
     StringBuilder.prototype =  {
 
         cat: function (){
-            var length = arguments.length,
+
+            var args = Array.prototype.slice.apply(arguments),
+                length = args.length,
                 i,
                 val;
-            for(i = 0; i < length; i += 1) {
-                val = arguments[i];
+            for (i = 0; i < length; i += 1) {
+                val = args[i];
 
-                if(isFunction(val)) {
+                if (isFunction(val)) {
                     this.cat.call(this, val());
-                } else if(isArray(val)) {
+                } else if (isArray(val)) {
                     this.cat.apply(this, val);
                 } else {
                     this.buffer.push(val);
                 }
             }
            return this;
+        },
+
+        rep: function() {
+            var length = arguments.length,
+                args = Array.prototype.slice.call(arguments, 0, -1),
+                repeat = arguments[arguments.length -1],
+                i;
+            for (i = 0; i < repeat; i += 1) {
+
+                this.cat.apply(this, args);
+            }
+
+            return this;
         }
 
 
