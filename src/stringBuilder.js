@@ -11,6 +11,8 @@
 
     var StringBuilder = function () { //constructor
            this.buffer = [];
+           this.prefix = [];
+           this.suffix = [];
     };
 
     function isFunction(val) {
@@ -39,7 +41,8 @@
                 } else if (isArray(val)) {
                     this.cat.apply(this, val);
                 } else {
-                    this.buffer.push(val);
+
+                    this.buffer.push(this.prefix.join('') + val + this.suffix.join(''));
                 }
             }
            return this;
@@ -73,9 +76,32 @@
         },
 
        string: function() {
-           var result = this.buffer.join(' ');
+           var result = this.buffer.join('');
            return result;
+       },
+
+       wrap: function(pre, suf){
+            this.prefix.push(pre);
+            this.suffix.push(suf);
+            return this;
+        },
+
+       end: function(deep) {
+            this.prefix.pop(deep);
+            this.suffix.pop(deep);
+            return this;
+        },
+
+
+
+       prefix: function(prefix) {
+
+       },
+
+       suffix: function(suffix) {
+
        }
+
 
 
 
