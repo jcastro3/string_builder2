@@ -13,6 +13,7 @@
            this.buffer = [];
            this.prefix = [];
            this.suffix = [];
+
     };
 
     function isFunction(val) {
@@ -24,11 +25,28 @@
        return Object.prototype.toString.call(val) === '[object Array]'
     }
 
+    function convert(args) {
+        var length = args.length,
+            i,
+            val,
+            tmpPrefix =[];
+        for(i = 0; i < length; i += 1 ){
+            val = args[i];
+            if(isFunction(val)) {
+                convert.call(this, val());
+            } else if(isArray(val)) {
+                convert.apply(this, val);
+            }
+                tmpPrefix.push(val);
+
+        }
+        return tmpPrefix.join('');
+
+    }
 
     StringBuilder.prototype =  {
 
         cat: function (){
-
             var args = [].slice.apply(arguments),
                 length = args.length,
                 i,
@@ -41,11 +59,12 @@
                 } else if (isArray(val)) {
                     this.cat.apply(this, val);
                 } else {
-
-                    this.buffer.push(this.prefix.join('') + val + this.suffix.join(''));
+                    var p = convert(this.prefix);
+                    var s = convert(this.suffix);
+                    this.buffer.push(p + val + s);
                 }
             }
-           return this;
+            return this;
         },
 
         rep: function() {
