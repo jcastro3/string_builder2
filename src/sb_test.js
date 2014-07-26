@@ -13,6 +13,7 @@ describe('___String Builder___', function () {
 
     afterEach(function () {
        storage = [];
+
     });
 
     describe('Cat Method', function(){
@@ -82,41 +83,65 @@ describe('___String Builder___', function () {
     //rep(arg1, arg2,..., argN, howManyTimes)
     describe('REP method', function() {
     //concatenates the same string a given number of times
-        describe('repeat a string', function () {
+            describe('repeat a string', function () {
 
-            it('should repeat 2 times', function() {
-                storage = sb.rep('robot', 2);
-                expect(storage.buffer).toMatch(['robot', 'robot']);
+                it('should repeat 2 times', function() {
+                    storage = sb.rep('robot', 2);
+                    expect(storage.buffer).toMatch(['robot', 'robot']);
+                });
+
+                it('should repeat 5 times', function(){
+                    storage = sb.rep('robot', 5);
+                    expect(storage.buffer).toMatch(['robot', 'robot','robot', 'robot','robot']);
+                });
+
             });
 
-            it('should repeat 5 times', function(){
-                storage = sb.rep('robot', 5);
-                expect(storage.buffer).toMatch(['robot', 'robot','robot', 'robot','robot']);
+            describe('combined with cat()', function() {
+
+                it('should store result in buffer ', function(){
+                    storage = sb.cat('Mom, can you')
+                                .rep('please', 4)
+                                .cat('buy', ['me'])
+                                .cat(function(){ return 'ice cream';});
+                    expect(storage.buffer).toMatch(['Mom, can you', 'please', 'please', 'please', 'please','buy', 'me', 'ice cream']);
+                })
             });
 
-        });
+            describe('array and function as parameters', function() {
+                it('should pass ', function () {
+                    storage = sb.cat('The surface of the sun is')
+                        .cat(function () {
+                            return 15;
+                        })
+                        .rep(function () {
+                            return 0;
+                        }, 3)
+                        .rep([0], 3)
+                        .cat('degrees C');
+                    expect(storage.buffer).toMatch(['The surface of the sun is', '15', '0', '0', '0', '0', '0', '0', 'degrees C']);
+                })
 
-        describe('combined with cat()', function() {
+                describe('array un numerous elements', function()
+                {
+                    it('should wrap numerous array elements', function () {
+                        var min_string = '<',
+                            max_string = '>',
+                            i,
+                            min = [],
+                            max = [];
+                        for (i = 0; i < 100; i += 1) {
+                            min.push(min_string);
+                            max.push(max_string);
+                        }
+                        var cool_name = min.concat('Insert Your Name Here').concat(max);
 
-            it('should store result in buffer ', function(){
-                storage = sb.cat('Mom, can you')
-                            .rep('please', 4)
-                            .cat('buy', ['me'])
-                            .cat(function(){ return 'ice cream';});
-                expect(storage.buffer).toMatch(['Mom, can you', 'please', 'please', 'please', 'please','buy', 'me', 'ice cream']);
-            })
-        });
+                        storage = sb.rep('<', 100).cat('Insert Your Name Here').rep('>', 100).string();
+                        expect(storage).toBe(cool_name.join(''));
+                    })
 
-        describe('array and function as parameters', function() {
-            it('should pass ', function() {
-                storage = sb.cat('The surface of the sun is')
-                            .cat(function() { return 15;})
-                            .rep(function() {return 0;},3)
-                            .rep([0],3)
-                            .cat('degrees C');
-                expect(storage.buffer).toMatch(['The surface of the sun is','15','0','0','0','0','0','0','degrees C']);
-            })
-        })
+                })
+
     });
 
     describe('catIF method', function() {
@@ -128,7 +153,7 @@ describe('___String Builder___', function () {
                             .cat(', and her name is')
                             .catIf('July', lady ==='f');
                 expect(storage.buffer).toMatch(['Hi my name is', 'Tony', ', and her name is', 'July']);
-            })
+            });
 
             it('array and functions as parameters', function() {
                 storage = sb.cat('Hi my', ['name'], function(){ return 'is';})
@@ -136,7 +161,7 @@ describe('___String Builder___', function () {
                             .cat('and her name is')
                             .catIf(['July'], lady === 'f');
                 expect(storage.buffer).toMatch(['Hi my', 'name', 'is', 'Tony','and her name is', 'July'])
-            })
+            });
             it('should be false', function() {
 
                 storage = sb.catIf('Im an alien', !dude);
@@ -144,7 +169,7 @@ describe('___String Builder___', function () {
                 expect(storage.buffer).not.toMatch(['Im an alien']);
             })
         })
-    })
+    });
 
 
     describe('String method', function() {
@@ -154,20 +179,20 @@ describe('___String Builder___', function () {
                 storage = sb.cat('Hello ').cat(function(){ return 'World'}).cat(['!']).string();
                 expect(typeof storage).toBe('string');
                 expect(storage).toBe('Hello World!');
-            })
+            });
 
             it('should return string, using rep()', function() {
                 storage = sb.rep('hi ', 5).string();
                 expect(typeof storage).toBe('string');
                 expect(storage).toBe('hi hi hi hi hi ');
-            })
+            });
 
             it('should return string, using catIf()', function() {
                 var print = true;
                 storage = sb.catIf('Print this because its true', print).string();
                 expect(typeof storage).toBe('string');
                 expect(storage).toBe('Print this because its true');
-            })
+            });
 
             it('should return string from a chain function that includes multiple parameters', function(){
                 var years = 9300,
@@ -181,39 +206,64 @@ describe('___String Builder___', function () {
                             .string();
                 expect(typeof storage).toBe('string');
                 expect(storage).toBe(string)
-            })
+            });
         })
     });
 
     describe('WRAP method', function() {
 
-        describe('simple strings as suffix an prefix', function() {
-            it('should wrap the string then use end', function() {
-                var solution = '<div>hello</div><div>world</div>!!!!!!!!!!';
+        describe('simple strings as suffix an prefix', function () {
+            it('should wrap the string then use end', function () {
+                var solution = '<div>hello</div><div>world</div>!!!!!!!!!!',
                     storage = sb
-                                .wrap('<div>', '</div>')
-                                .cat('hello')
-                                .cat('world')
-                                .end()
-                                .rep('!', 10)
-                                .string();
-                expect(storage).toBe(solution);
-            })
+                        .wrap('<div>', '</div>')
+                        .cat('hello')
+                        .cat('world')
+                        .end()
+                        .rep('!', 10)
+                        .string();
 
-            it('should wrap with given array parameters', function() {
+                expect(storage).toBe(solution);
+                expect(typeof storage).toBe('string');
+            });
+
+            it('should wrap with given array parameters', function () {
                 var solution = '<p><b>this should be bold</b></p><div>and this should repeat 2 times</div><div>and this should repeat 2 times</div>';
                 storage = sb
-                            .wrap(['<p>', '<b>'],['</b>', '</p>'])
-                            .cat('this should be bold')
-                            .end()
-                            .wrap(['<div>'], ['</div>'])
-                            .rep('and this should repeat 2 times', 2)
-                            .end()
-                            .string();
+                    .wrap(['<p>', '<b>'], ['</b>', '</p>'])
+                    .cat('this should be bold')
+                    .end()
+                    .wrap(['<div>'], ['</div>'])
+                    .rep('and this should repeat 2 times', 2)
+                    .end()
+                    .string();
                 expect(storage).toBe(solution);
             })
-        })
-    })
+        });
+        describe('using arrays', function () {
 
+                it('should wrap given arrays', function () {
+                    var answer = '<ul>' +
+                        '<li><a>item</a></li>' +
+                        '<li><a>item</a></li>' +
+                        '<li><a>item</a></li>' +
+                        '<li><a>item</a></li>' +
+                        '</ul>';
+                    storage = sb
+                        .cat('<ul>')
+                        .wrap(['<li>', '<a>'], ['</a>', '</li>'])
+                        .rep('item', 4)
+                        .end()
+                        .cat('</ul>')
+                        .string();
+                    expect(typeof storage).toBe('string');
+                    expect(storage).toBe(answer);
+                });
+
+            });
+
+        });
+
+    });
 
 });

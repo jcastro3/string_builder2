@@ -12,8 +12,8 @@
     var StringBuilder;
     StringBuilder = function () { //constructor
         this.buffer = [];
-        this.prefix = [];
-        this.suffix = [];
+        this.$prefix = [];
+        this.$suffix = [];
 
     };
 
@@ -29,7 +29,8 @@
     function push_to_buffer() {
         var args = [].slice.apply(arguments),
             length = args.length,
-            i;
+            i,
+            val;
 
 
         for (i = 0; i < length; i += 1) {
@@ -53,9 +54,9 @@
 
         cat: function (){
 
-            var wrap_it = this.prefix.concat([].slice.call(arguments).concat(this.suffix)); //wraps all prefix arguments suffix if any specified
+            var wrap_it = this.$prefix.concat([].slice.call(arguments).concat(this.$suffix)); //wraps all prefix arguments suffix if any specified
 
-            push_to_buffer.apply(this, wrap_it); //this function will wrap ever
+            push_to_buffer.apply(this, wrap_it); //this function will push to buffer
 
             return this;
         },
@@ -93,14 +94,22 @@
        },
 
        wrap: function(pre, suf){
-            this.prefix.push(pre);
-            this.suffix.push(suf);
+            this.$prefix.push(pre);
+            this.$suffix.push(suf);
             return this;
         },
 
+        prefix: function(pre) {
+           this.wrap.call(this, pre, []);
+        },
+
+        suffix: function(suf) {
+           this.wrap.call(this, [], suf);
+        },
+
        end: function(deep) {
-            this.prefix.pop(deep);
-            this.suffix.pop(deep);
+            this.$prefix.pop(deep);
+            this.$suffix.pop(deep);
             return this;
         }
 
