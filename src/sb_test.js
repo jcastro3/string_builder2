@@ -171,7 +171,7 @@ describe('___String Builder___', function () {
 
             it('should return string from a chain function that includes multiple parameters', function(){
                 var years = 9300,
-                    string = 'The risk of being struck by a falling meteorite is once every 9300 years!!!!!'
+                    string = 'The risk of being struck by a falling meteorite is once every 9300 years!!!!!';
                 storage = sb.cat(function() { return 'The risk of '}, 'being ', ['struck ', 'by '])
                             .cat('a falling meteorite ',['is '])
                             .catIf('once every 9300 ', years === 9300)
@@ -184,6 +184,36 @@ describe('___String Builder___', function () {
             })
         })
     });
+
+    describe('WRAP method', function() {
+
+        describe('simple strings as suffix an prefix', function() {
+            it('should wrap the string then use end', function() {
+                var solution = '<div>hello</div><div>world</div>!!!!!!!!!!';
+                    storage = sb
+                                .wrap('<div>', '</div>')
+                                .cat('hello')
+                                .cat('world')
+                                .end()
+                                .rep('!', 10)
+                                .string();
+                expect(storage).toBe(solution);
+            })
+
+            it('should wrap with given array parameters', function() {
+                var solution = '<p><b>this should be bold</b></p><div>and this should repeat 2 times</div><div>and this should repeat 2 times</div>';
+                storage = sb
+                            .wrap(['<p>', '<b>'],['</b>', '</p>'])
+                            .cat('this should be bold')
+                            .end()
+                            .wrap(['<div>'], ['</div>'])
+                            .rep('and this should repeat 2 times', 2)
+                            .end()
+                            .string();
+                expect(storage).toBe(solution);
+            })
+        })
+    })
 
 
 });

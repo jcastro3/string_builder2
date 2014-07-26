@@ -9,10 +9,11 @@
  * */
 (function(col) {
 
-    var StringBuilder = function () { //constructor
-           this.buffer = [];
-           this.prefix = [];
-           this.suffix = [];
+    var StringBuilder;
+    StringBuilder = function () { //constructor
+        this.buffer = [];
+        this.prefix = [];
+        this.suffix = [];
 
     };
 
@@ -25,45 +26,37 @@
        return Object.prototype.toString.call(val) === '[object Array]'
     }
 
-    function convert(args) {
-        var length = args.length,
-            i,
-            val,
-            tmpPrefix =[];
-        for(i = 0; i < length; i += 1 ){
-            val = args[i];
-            if(isFunction(val)) {
-                convert.call(this, val());
-            } else if(isArray(val)) {
-                convert.apply(this, val);
-            }
-                tmpPrefix.push(val);
+    function push_to_buffer() {
+        var args = [].slice.apply(arguments),
+            length = args.length,
+            i;
 
+
+        for (i = 0; i < length; i += 1) {
+            val = args[i];
+
+            if (isFunction(val)) {
+                push_to_buffer.call(this, val());
+            } else if (isArray(val)) {
+                push_to_buffer.apply(this, val);
+
+            } else {
+
+                this.buffer.push(val);
+            }
         }
-        return tmpPrefix.join('');
+
 
     }
 
     StringBuilder.prototype =  {
 
         cat: function (){
-            var args = [].slice.apply(arguments),
-                length = args.length,
-                i,
-                val;
-            for (i = 0; i < length; i += 1) {
-                val = args[i];
 
-                if (isFunction(val)) {
-                    this.cat.call(this, val());
-                } else if (isArray(val)) {
-                    this.cat.apply(this, val);
-                } else {
-                    var p = convert(this.prefix);
-                    var s = convert(this.suffix);
-                    this.buffer.push(p + val + s);
-                }
-            }
+            var wrap_it = this.prefix.concat([].slice.call(arguments).concat(this.suffix)); //wraps all prefix arguments suffix if any specified
+
+            push_to_buffer.apply(this, wrap_it); //this function will wrap ever
+
             return this;
         },
 
@@ -109,17 +102,11 @@
             this.prefix.pop(deep);
             this.suffix.pop(deep);
             return this;
-        },
+        }
 
 
 
-       prefix: function(prefix) {
 
-       },
-
-       suffix: function(suffix) {
-
-       }
 
 
 
