@@ -7,7 +7,7 @@
  *
  *
  * */
-(function(col) {
+(function(collection) {
 
     var StringBuilder;
     StringBuilder = function () { //constructor
@@ -166,7 +166,7 @@
 
 
 
-    col.StringBuilder = StringBuilder;
-    return col;
+    collection.StringBuilder = StringBuilder;
+    return collection;
 
 }(this));
